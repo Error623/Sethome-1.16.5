@@ -11,13 +11,13 @@ public final class Sethome extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getLogger().info(ChatColor.DARK_GREEN + "SetHome is Enabled");
+        getLogger().info( "SetHome is Enabled");
 
         database = new SQLite(this);
         database.connect();
         database.createTable();
 
-        // 2+2=
+
         getCommand("sethome").setExecutor(new SetHomeCommand(this));
         this.getCommand("delhome").setExecutor(new DelHomeCommand(database));
         HomesCommand homesCommand = new HomesCommand(database, this);
@@ -28,7 +28,7 @@ public final class Sethome extends JavaPlugin {
 
     @Override
     public void onDisable() { // название public подчёркнуто и серое
-        getLogger().info(ChatColor.DARK_BLUE + "Sethome is Disabled");
+        getLogger().info( "Sethome is Disabled");
     }
 
     public SQLite getDatabase() {

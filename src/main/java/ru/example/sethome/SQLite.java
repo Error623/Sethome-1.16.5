@@ -1,5 +1,7 @@
 package ru.example.sethome;
 
+import org.bukkit.Bukkit;
+
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
@@ -87,21 +89,42 @@ public class SQLite {
         return connection;
     }
 
-    public boolean deleteHome(String uuid, String home_name) {
-    String sql = "DELETE FROM homes WHERE uuid = ? AND home_name = ?";
+    public boolean deleteHome(String uuid, String playerName, String homeName) {
+        String checkSql = "SELECT COUNT(*) FROM homes WHERE uuid = ? AND home_name = ?";
+        String deleteSql = "DELETE FROM homes WHERE uuid = ? AND home_name = ?";
 
-    try {
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setString(1, uuid);
-        ps.setString(2, home_name);
-        int affectedRows = ps.executeUpdate();
-        ps.close();
-    } catch (SQLException e) {
-    e.printStackTrace();
-    return false;
+        try {
+            // Проверяем, есть ли точка
+            PreparedStatement checkStmt = connection.prepareStatement(checkSql);
+            checkStmt.setString(1, uuid);
+            checkStmt.setString(2, homeName);
+            ResultSet rs = checkStmt.executeQuery();
+
+            boolean exists = rs.next() && rs.getInt(1) > 0;
+            checkStmt.close();
+
+            if (!exists) {
+                return false; // Точки нет
+            }
+
+            // Удаляем точку
+            PreparedStatement deleteStmt = connection.prepareStatement(deleteSql);
+            deleteStmt.setString(1, uuid);
+            deleteStmt.setString(2, homeName);
+            deleteStmt.executeUpdate();
+            deleteStmt.close();
+
+            // Лог в консоль с ником
+            Bukkit.getLogger().info("Игрок " + playerName + " удалил точку '" + homeName + "'");
+
+            return true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-    return true;
-    }
+
     public class HomeData {
 
     public String homeName;

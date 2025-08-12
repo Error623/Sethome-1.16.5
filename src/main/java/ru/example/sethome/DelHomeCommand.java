@@ -26,10 +26,11 @@ public class DelHomeCommand implements CommandExecutor {
            return true;
         }
         Player player = (Player) sender;
-        String homeName = strings[0]; // args красный
+        String homeName = strings[0];
         String uuid = player.getUniqueId().toString();
 
-        boolean deleted = database.deleteHome(uuid, homeName);
+        boolean deleted = database.deleteHome(uuid, player.getName(), homeName);
+
 
         if (deleted) {
         player.sendMessage(ChatColor.GREEN + "Точка: " + homeName + " удалена");
