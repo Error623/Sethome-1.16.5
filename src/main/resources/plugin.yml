@@ -1,0 +1,15 @@
+name: Sethome
+version: '${project.version}'
+main: ru.example.sethome.Sethome
+Author: Error623
+api-version: '1.16'
+commands:
+  sethome:
+    description: save a point of home
+    usage: /sethome
+  delhome:
+    description: delete a point of home
+    usage: /delhome
+  homes:
+    description: open to a GUI with  a points of homes
+    usage: /homes
